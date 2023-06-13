@@ -1,0 +1,9 @@
+/**
+ * 
+ */
+/**
+ * @author weron
+ *
+ */
+module Chess {
+}
