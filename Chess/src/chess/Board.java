@@ -36,7 +36,7 @@ public class Board {
 		}
 	}
 
-	private void initializePieces() {/*
+	private void initializePieces() {
 	    squares[0][0].setPiece(new Rook(Color.WHITE, 0, 0));
 	    squares[0][1].setPiece(new Knight(Color.WHITE, 0, 1));
 	    squares[0][2].setPiece(new Bishop(Color.WHITE, 0, 2));
@@ -61,9 +61,7 @@ public class Board {
 	    squares[7][7].setPiece(new Rook(Color.BLACK, 7, 7));
 	    for (int i = 0; i < 8; i++) {
 	        squares[6][i].setPiece(new Pawn(Color.BLACK, 6, i));
-	    }*/
-	    squares[6][0].setPiece(new Pawn(Color.WHITE, 6, 0));
-	    squares[1][0].setPiece(new Pawn(Color.BLACK, 1, 0));
+	    }
 	}
 
 	public String getSquareArray() {
