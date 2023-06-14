@@ -10,7 +10,7 @@ public class Rook extends Piece {
 	}
 
 	@Override
-	public List<Move> getLegalMoves(Square[][] square, Board board) {
+	public List<Move> getPieceMoves(Square[][] square, Board board) {
 	    List<Move> legalMoves = new ArrayList<>();
 
 	    int currentRow = getRow();

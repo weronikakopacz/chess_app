@@ -1,6 +1,8 @@
 package chess;
 
-public class Move {
+import java.util.Objects;
+
+public class Move implements Cloneable {
     private int startRow;
     private int startCol;
     private int endRow;
@@ -39,5 +41,24 @@ public class Move {
         }
         Move other = (Move) obj;
         return startRow == other.startRow && startCol == other.startCol && endRow == other.endRow && endCol == other.endCol;
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(startRow, startCol, endRow, endCol);
+    }
+
+    @Override
+    public String toString() {
+        return startRow + "-" + startCol + " to " + endRow + "-" + endCol;
+    }
+    
+    @Override
+    public Move clone() {
+        try {
+            return (Move) super.clone();
+        } catch (CloneNotSupportedException e) {
+            return null;
+        }
     }
 }

@@ -1,7 +1,7 @@
 package chess;
 import java.util.List;
 
-public abstract class Piece {
+public abstract class Piece implements Cloneable {
     private Color color;
     private int row;
     private int column;
@@ -42,7 +42,16 @@ public abstract class Piece {
         this.moved = moved;
     }
 
-    public abstract List<Move> getLegalMoves(Square[][] square, Board board);
+    public abstract List<Move> getPieceMoves(Square[][] square, Board board);
 
     public abstract char getSymbol();
+    
+    @Override
+    public Piece clone() {
+        try {
+            return (Piece) super.clone();
+        } catch (CloneNotSupportedException e) {
+            return null;
+        }
+    }
 }

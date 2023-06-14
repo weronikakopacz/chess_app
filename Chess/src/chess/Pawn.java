@@ -10,7 +10,7 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public List<Move> getLegalMoves(Square[][] square, Board board) {
+    public List<Move> getPieceMoves(Square[][] square, Board board) {
         List<Move> legalMoves = new ArrayList<>();
 
         int direction = getColor() == Color.WHITE ? 1 : -1;
@@ -18,16 +18,16 @@ public class Pawn extends Piece {
 
         int currentRow = getRow();
         int currentCol = getColumn();
-
+        //ruch o jedno pole
         int nextRow = currentRow + direction;
         if (nextRow >= 0 && nextRow < 8 && square[nextRow][currentCol].getPiece() == null) {
             legalMoves.add(new Move(currentRow, currentCol, nextRow, currentCol));            
         }
-
+        //ruch o dwa pola
         if (currentRow == startRow && square[nextRow][currentCol].getPiece() == null && square[nextRow + direction][currentCol].getPiece() == null) {
             legalMoves.add(new Move(currentRow, currentCol, nextRow + direction, currentCol));
         }
-
+        //zbijanie
         int[] captureCols = { currentCol - 1, currentCol + 1 };
         for (int captureCol : captureCols) {
             if (nextRow >= 0 && nextRow < 8 && captureCol >= 0 && captureCol < 8) {
@@ -37,7 +37,7 @@ public class Pawn extends Piece {
                 }
             }
         }
-
+        //en passant
         Move lastMove = board.getLastMove();
         if (lastMove != null) {
             Square endSquare = board.getSquare(lastMove.getEndRow(), lastMove.getEndCol());

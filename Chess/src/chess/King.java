@@ -10,7 +10,7 @@ public class King extends Piece {
 	}
 
 	@Override
-	public List<Move> getLegalMoves(Square[][] square, Board board) {
+	public List<Move> getPieceMoves(Square[][] square, Board board) {
 	    List<Move> legalMoves = new ArrayList<>();
 
 	    int currentRow = getRow();
@@ -43,16 +43,4 @@ public class King extends Piece {
 	public char getSymbol() {
 		return 'K';
 	}
-	
-    @Override
-    public void setRow(int row) {
-        super.setRow(row);
-        Board.getInstance().updateKingSquare(this);
-    }
-
-    @Override
-    public void setColumn(int column) {
-        super.setColumn(column);
-        Board.getInstance().updateKingSquare(this);
-    }
 }
