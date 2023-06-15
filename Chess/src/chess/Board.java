@@ -63,7 +63,7 @@ public class Board {
 	public String getSquareArray() {
 	    StringBuilder boardString = new StringBuilder();
 
-	    for (int row = 0; row < 8; row++) {
+	    for (int row = 7; row >= 0; row--) {
 	        for (int column = 0; column < 8; column++) {
 	            Square square = squares[row][column];
 	            char pieceChar = square.getPiece() != null ? square.getPiece().getSymbol() : 'X';
@@ -174,8 +174,8 @@ public class Board {
         if (!isCheck(kingColor, this)) {
             return false;
         }
-        Color opponentColor = (kingColor == Color.WHITE) ? Color.BLACK : Color.WHITE;
-        List<Move> opponentMoves = legalMoves(opponentColor);
+        Color playerColor = (kingColor == Color.WHITE) ? Color.WHITE : Color.BLACK;
+        List<Move> opponentMoves = legalMoves(playerColor);
         
         return opponentMoves.isEmpty();
     }

@@ -47,15 +47,16 @@ public class Game {
 
                 board.makeMove(move, scanner, currentPlayer);
 
-                currentPlayer = currentPlayer == Color.WHITE ? Color.BLACK : Color.WHITE;
+                Color opponentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
 
-                if (board.isCheckmate(currentPlayer)) {
+                if (board.isCheckmate(opponentPlayer)) {
                     System.out.println("Checkmate! Player " + currentPlayer + " wins.");
                     break;
-                } else if (board.isStalemate(currentPlayer)) {
+                } else if (board.isStalemate(opponentPlayer)) {
                     System.out.println("Stalemate! The game ends in a draw.");
                     break;
                 }
+                currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
             }
         }
     }
