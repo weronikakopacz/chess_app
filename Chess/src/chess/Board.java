@@ -147,7 +147,6 @@ public class Board {
         }
     }
 
-
 	public Move getLastMove() {
         return lastMove;
     }
@@ -244,7 +243,6 @@ public class Board {
 
         return copy;
     }
-
     
     private Square findKingSquare(Color kingColor) {
         for (int row = 0; row < 8; row++) {

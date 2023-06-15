@@ -55,7 +55,6 @@ public class Pawn extends Piece {
         return legalMoves;
     }
 
-
     @Override
     public char getSymbol() {
         return 'P';
