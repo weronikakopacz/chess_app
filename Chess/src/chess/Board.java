@@ -34,7 +34,7 @@ public class Board {
 		}
 	}
 
-	private void initializePieces() {
+	private void initializePieces() {/*
 	    squares[0][0].setPiece(new Rook(Color.WHITE, 0, 0));
 	    squares[0][1].setPiece(new Knight(Color.WHITE, 0, 1));
 	    squares[0][2].setPiece(new Bishop(Color.WHITE, 0, 2));
@@ -57,7 +57,13 @@ public class Board {
 	    squares[7][7].setPiece(new Rook(Color.BLACK, 7, 7));
 	    for (int i = 0; i < 8; i++) {
 	        squares[6][i].setPiece(new Pawn(Color.BLACK, 6, i));
-	    }
+	    }*/
+		squares[7][7].setPiece(new Rook(Color.BLACK, 7, 7));
+		squares[7][4].setPiece(new King(Color.BLACK, 7, 4));
+		squares[0][7].setPiece(new Rook(Color.WHITE, 0, 7));
+		 squares[0][4].setPiece(new King(Color.WHITE, 0, 4));
+		 squares[0][0].setPiece(new Rook(Color.WHITE, 0, 0));
+		 squares[7][0].setPiece(new Rook(Color.BLACK, 7, 0));
 	}
 
 	public String getSquareArray() {
@@ -99,11 +105,29 @@ public class Board {
         Square toSquare = squares[toRow][toCol];
 
         Piece piece = fromSquare.getPiece();
+        piece.setMoved(true);
 
         if (piece instanceof Pawn && fromCol != toCol && toSquare.getPiece() == null) {
             int capturedCol = toCol;
             int capturedRow = fromRow;
             squares[capturedRow][capturedCol].setPiece(null);
+        } else if (piece instanceof King && Math.abs(toCol - fromCol) == 2 && !isCheck(currentPlayer, this)) {
+            int rookFromCol, rookToCol;
+            if (toCol > fromCol) {
+                rookFromCol = 7;
+                rookToCol = toCol - 1;
+            } else {
+                rookFromCol = 0;
+                rookToCol = toCol + 1;
+            }
+            Square rookFromSquare = squares[fromRow][rookFromCol];
+            Square rookToSquare = squares[fromRow][rookToCol];
+            Piece rook = rookFromSquare.getPiece();
+            rook.setMoved(true);
+            rookToSquare.setPiece(rook);
+            rookFromSquare.setPiece(null);
+            rook.setRow(toRow);
+            rook.setColumn(rookToCol);
         }
 
         toSquare.setPiece(piece);

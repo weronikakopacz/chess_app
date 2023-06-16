@@ -27,14 +27,34 @@ public class King extends Piece {
 
 	        if (row >= 0 && row < 8 && col >= 0 && col < 8) {
 	            Piece piece = square[row][col].getPiece();
-
 	            if (piece == null || piece.getColor() != getColor()) {
 	                legalMoves.add(new Move(currentRow, currentCol, row, col));
 	            }
 	        }
 	    }
 	    
-	    // TODO:roszada
+	    if (currentRow == 0 && currentCol == 4 && !hasMoved()) {
+	        Piece rookShort = square[0][7].getPiece();
+	        if (rookShort instanceof Rook && !rookShort.hasMoved() && rookShort.getColor() == getColor() && square[0][5].getPiece() == null && square[0][6].getPiece() == null) {
+	        	legalMoves.add(new Move(currentRow, currentCol, 0, 6));
+	        }
+
+	        Piece rookLong = square[0][0].getPiece();
+	        if (rookLong instanceof Rook && !rookLong.hasMoved() && rookLong.getColor() == getColor() && square[0][3].getPiece() == null && square[0][2].getPiece() == null && square[0][1].getPiece() == null) {
+	            legalMoves.add(new Move(currentRow, currentCol, 0, 2));
+	        }
+	    } else if (currentRow == 7 && currentCol == 4) {
+	        Piece rookShort = square[7][7].getPiece();
+	        if (rookShort instanceof Rook && !rookShort.hasMoved() && rookShort.getColor() == getColor() && square[7][5].getPiece() == null && square[7][6].getPiece() == null) {
+	            legalMoves.add(new Move(currentRow, currentCol, 7, 6));
+	        }
+
+	        Piece rookLong = square[7][0].getPiece();
+	        if (rookLong instanceof Rook && !rookLong.hasMoved() && rookLong.getColor() == getColor() && square[7][3].getPiece() == null && square[7][2].getPiece() == null && square[7][1].getPiece() == null) {
+	            legalMoves.add(new Move(currentRow, currentCol, 7, 2));
+	        }
+	    }
+
 	    
 	    return legalMoves;
 	}

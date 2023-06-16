@@ -45,7 +45,7 @@ public class Game {
                     continue;
                 }
 
-                board.makeMove(move, scanner, currentPlayer);
+                board.makeMove(move, scanner, currentPlayer, board);
 
                 Color opponentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
 

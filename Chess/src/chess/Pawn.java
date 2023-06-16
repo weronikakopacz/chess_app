@@ -14,18 +14,16 @@ public class Pawn extends Piece {
         List<Move> legalMoves = new ArrayList<>();
 
         int direction = getColor() == Color.WHITE ? 1 : -1;
-        int startRow = getColor() == Color.WHITE ? 1 : 6;
 
         int currentRow = getRow();
         int currentCol = getColumn();
-        //ruch o jedno pole
+        //ruch o jedno pole i dwa pola
         int nextRow = currentRow + direction;
         if (nextRow >= 0 && nextRow < 8 && square[nextRow][currentCol].getPiece() == null) {
-            legalMoves.add(new Move(currentRow, currentCol, nextRow, currentCol));            
-        }
-        //ruch o dwa pola
-        if (currentRow == startRow && square[nextRow][currentCol].getPiece() == null && square[nextRow + direction][currentCol].getPiece() == null) {
-            legalMoves.add(new Move(currentRow, currentCol, nextRow + direction, currentCol));
+            legalMoves.add(new Move(currentRow, currentCol, nextRow, currentCol));
+            if (square[nextRow + direction][currentCol].getPiece() == null && !square[currentRow][currentCol].getPiece().hasMoved()) {
+                legalMoves.add(new Move(currentRow, currentCol, nextRow + direction, currentCol));
+            }
         }
         //zbijanie
         int[] captureCols = { currentCol - 1, currentCol + 1 };
