@@ -13,21 +13,18 @@ public class Knight extends Piece {
 	public List<Move> getPieceMoves(Square[][] square, Board board) {
 	    List<Move> legalMoves = new ArrayList<>();
 
-	    int currentRow = getRow();
-	    int currentCol = getColumn();
+	    int startRow = getRow();
+	    int startCol = getColumn();
 
 	    int[] moveRows = { -2, -1, 1, 2, 2, 1, -1, -2 };
 	    int[] moveCols = { 1, 2, 2, 1, -1, -2, -2, -1 };
 
 	    for (int i = 0; i < 8; i++) {
-	        int newRow = currentRow + moveRows[i];
-	        int newCol = currentCol + moveCols[i];
+	        int endRow = startRow + moveRows[i];
+	        int endCol = startCol + moveCols[i];
 
-	        if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
-	            Piece piece = square[newRow][newCol].getPiece();
-	            if (piece == null || piece.getColor() != getColor()) {
-	                legalMoves.add(new Move(currentRow, currentCol, newRow, newCol));
-	            }
+	        if (isValidMove(square, endRow, endCol)) {
+	            legalMoves.add(new Move(startRow, startCol, endRow, endCol));
 	        }
 	    }
 

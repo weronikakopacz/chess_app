@@ -13,8 +13,8 @@ public class Queen extends Piece {
 	public List<Move> getPieceMoves(Square[][] square, Board board) {
 	    List<Move> legalMoves = new ArrayList<>();
 
-	    int currentRow = getRow();
-	    int currentCol = getColumn();
+	    int startRow = getRow();
+	    int startCol = getColumn();
 
 	    int[][] directions = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0},  {1, 1}};
 
@@ -22,23 +22,19 @@ public class Queen extends Piece {
 	        int dRow = direction[0];
 	        int dCol = direction[1];
 
-	        int row = currentRow + dRow;
-	        int col = currentCol + dCol;
+	        int endRow = startRow + dRow;
+	        int endCol = startCol + dCol;
 
-	        while (row >= 0 && row < 8 && col >= 0 && col < 8) {
-	            Piece piece = square[row][col].getPiece();
-
-	            if (piece == null) {
-	                legalMoves.add(new Move(currentRow, currentCol, row, col));
-	            } else {
-	                if (piece.getColor() != getColor()) {
-	                    legalMoves.add(new Move(currentRow, currentCol, row, col));
-	                }
+	        while (isValidMove(square, endRow, endCol)) {
+	            legalMoves.add(new Move(startRow, startCol, endRow, endCol));
+	            
+	            Piece piece = square[endRow][endCol].getPiece();
+	            if (piece != null) {
 	                break;
 	            }
-
-	            row += dRow;
-	            col += dCol;
+	            
+	            endRow += dRow;
+	            endCol += dCol;
 	        }
 	    }
 

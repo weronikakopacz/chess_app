@@ -9,33 +9,37 @@ public class Pawn extends Piece {
         super(color, row, column);
     }
 
-    @Override
     public List<Move> getPieceMoves(Square[][] square, Board board) {
         List<Move> legalMoves = new ArrayList<>();
 
         int direction = getColor() == Color.WHITE ? 1 : -1;
 
-        int currentRow = getRow();
-        int currentCol = getColumn();
-        //ruch o jedno pole i dwa pola
-        int nextRow = currentRow + direction;
-        if (nextRow >= 0 && nextRow < 8 && square[nextRow][currentCol].getPiece() == null) {
-            legalMoves.add(new Move(currentRow, currentCol, nextRow, currentCol));
-            if (square[nextRow + direction][currentCol].getPiece() == null && !square[currentRow][currentCol].getPiece().hasMoved()) {
-                legalMoves.add(new Move(currentRow, currentCol, nextRow + direction, currentCol));
+        int startRow = getRow();
+        int startCol = getColumn();
+        int endRow = startRow + direction;
+
+        // Ruch o jedno pole
+        if (isValidMove(square, endRow, startCol)) {
+            legalMoves.add(new Move(startRow, startCol, endRow, startCol));
+
+            // Ruch o dwa pola na początku
+            if (!hasMoved() && isValidMove(square, endRow + direction, startCol)) {
+                legalMoves.add(new Move(startRow, startCol, endRow + direction, startCol));
             }
         }
-        //zbijanie
-        int[] captureCols = { currentCol - 1, currentCol + 1 };
+
+        // Zbijanie
+        int[] captureCols = { startCol - 1, startCol + 1 };
         for (int captureCol : captureCols) {
-            if (nextRow >= 0 && nextRow < 8 && captureCol >= 0 && captureCol < 8) {
-                Piece capturedPiece = square[nextRow][captureCol].getPiece();
+            if (isValidMove(square, endRow, captureCol)) {
+                Piece capturedPiece = square[endRow][captureCol].getPiece();
                 if (capturedPiece != null && capturedPiece.getColor() != getColor()) {
-                    legalMoves.add(new Move(currentRow, currentCol, nextRow, captureCol));
+                    legalMoves.add(new Move(startRow, startCol, endRow, captureCol));
                 }
             }
         }
-        //en passant
+
+        // En passant
         Move lastMove = board.getLastMove();
         if (lastMove != null) {
             Square endSquare = board.getSquare(lastMove.getEndRow(), lastMove.getEndCol());
@@ -43,9 +47,8 @@ public class Pawn extends Piece {
 
             if (movedPiece instanceof Pawn && Math.abs(lastMove.getStartRow() - lastMove.getEndRow()) == 2) {
                 int enPassantRow = getColor() == Color.WHITE ? 4 : 3;
-                if (currentRow == enPassantRow) {
-                    int enPassantCol = lastMove.getEndCol();
-                    legalMoves.add(new Move(currentRow, currentCol, nextRow, enPassantCol));
+                if (startRow == enPassantRow && isValidMove(square, endRow, lastMove.getEndCol())) {
+                    legalMoves.add(new Move(startRow, startCol, endRow, lastMove.getEndCol()));
                 }
             }
         }

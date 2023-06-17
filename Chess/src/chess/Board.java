@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 public class Board {
 	private Square[][] squares;
-	private static Board instance;
 	private Move lastMove;
 
 	public Board() {
@@ -14,13 +13,6 @@ public class Board {
 		initializeBoard();
 		initializePieces();
 	}
-	
-    public static Board getInstance() {
-        if (instance == null) {
-            instance = new Board();
-        }
-        return instance;
-    }
     
     public Square getSquare(int row, int col) {
         return squares[row][col];

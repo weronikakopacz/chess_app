@@ -1,7 +1,5 @@
 package chess;
 
-import java.util.Objects;
-
 public class Move implements Cloneable {
     private int startRow;
     private int startCol;
@@ -41,11 +39,6 @@ public class Move implements Cloneable {
         }
         Move other = (Move) obj;
         return startRow == other.startRow && startCol == other.startCol && endRow == other.endRow && endCol == other.endCol;
-    }
-    
-    @Override
-    public int hashCode() {
-        return Objects.hash(startRow, startCol, endRow, endCol);
     }
 
     @Override

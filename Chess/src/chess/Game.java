@@ -19,19 +19,13 @@ public class Game {
                 System.out.print("Enter your move (e.g., e2-e4): ");
                 String moveString = scanner.nextLine();
 
-                String[] moveParts = moveString.split("-");
-                if (moveParts.length != 2) {
-                    System.out.println("Invalid move format. Please try again.");
+                if (!isMoveValid(moveString)) {
                     continue;
                 }
 
+                String[] moveParts = moveString.split("-");
                 String fromSquare = moveParts[0].trim();
                 String toSquare = moveParts[1].trim();
-
-                if (fromSquare.length() != 2 || toSquare.length() != 2) {
-                    System.out.println("Invalid move format. Please try again.");
-                    continue;
-                }
 
                 int fromCol = fromSquare.charAt(0) - 'a';
                 int fromRow = fromSquare.charAt(1) - '1';
@@ -56,9 +50,32 @@ public class Game {
                     System.out.println("Stalemate! The game ends in a draw.");
                     break;
                 }
-                currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
+
+                changePlayer();
             }
         }
+    }
+    
+    private boolean isMoveValid(String moveString) {
+        String[] moveParts = moveString.split("-");
+        if (moveParts.length != 2) {
+            System.out.println("Invalid move format. Please try again.");
+            return false;
+        }
+
+        String fromSquare = moveParts[0].trim();
+        String toSquare = moveParts[1].trim();
+
+        if (fromSquare.length() != 2 || toSquare.length() != 2) {
+            System.out.println("Invalid move format. Please try again.");
+            return false;
+        }
+
+        return true;
+    }
+    
+    private void changePlayer() {
+        currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
     }
 
     public static void main(String[] args) {

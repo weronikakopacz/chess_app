@@ -14,63 +14,30 @@ public class King extends Piece {
 	public List<Move> getPieceMoves(Square[][] square, Board board) {
 	    List<Move> legalMoves = new ArrayList<>();
 
-	    int currentRow = getRow();
-	    int currentCol = getColumn();
+	    int startRow = getRow();
+        int startCol = getColumn();
 
-	    int[][] directions = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0},  {1, 1}};
+        int[][] directions = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
 
-	    for (int[] direction : directions) {
-	        int dRow = direction[0];
-	        int dCol = direction[1];
+        for (int[] direction : directions) {
+            int dRow = direction[0];
+            int dCol = direction[1];
 
-	        int row = currentRow + dRow;
-	        int col = currentCol + dCol;
+            int endRow = startRow + dRow;
+            int endCol = startCol + dCol;
 
-	        if (row >= 0 && row < 8 && col >= 0 && col < 8) {
-	            Piece piece = square[row][col].getPiece();
-	            if (piece == null || piece.getColor() != getColor()) {
-	                legalMoves.add(new Move(currentRow, currentCol, row, col));
-	            }
-	        }
-	    }
+            if (isValidMove(square, endRow, endCol)) {
+                legalMoves.add(new Move(startRow, startCol, endRow, endCol));
+            }
+        }
 	    
-	    if (currentRow == 0 && currentCol == 4 && !hasMoved()) {
-	        Piece rookShort = square[0][7].getPiece();
-	        if (rookShort instanceof Rook && !rookShort.hasMoved() && rookShort.getColor() == getColor() && square[0][5].getPiece() == null && square[0][6].getPiece() == null) {
-	        	Board copy = board.copyBoard();
-	        	copy.makeMove(new Move(currentRow, currentCol, 0, 5), new Scanner(System.in), getColor());
-	        	if (!copy.isCheck(getColor(), copy)) {
-	        		legalMoves.add(new Move(currentRow, currentCol, 0, 6));
-	        	}
-	        }
-
-	        Piece rookLong = square[0][0].getPiece();
-	        if (rookLong instanceof Rook && !rookLong.hasMoved() && rookLong.getColor() == getColor() && square[0][3].getPiece() == null && square[0][2].getPiece() == null && square[0][1].getPiece() == null) {
-	        	Board copy = board.copyBoard();
-	        	copy.makeMove(new Move(currentRow, currentCol, 0, 3), new Scanner(System.in), getColor());
-	        	if (!copy.isCheck(getColor(), copy)) {
-	        		legalMoves.add(new Move(currentRow, currentCol, 0, 2));
-	        	}
-	        }
-	    } else if (currentRow == 7 && currentCol == 4) {
-	        Piece rookShort = square[7][7].getPiece();
-	        if (rookShort instanceof Rook && !rookShort.hasMoved() && rookShort.getColor() == getColor() && square[7][5].getPiece() == null && square[7][6].getPiece() == null) {
-	        	Board copy = board.copyBoard();
-	        	copy.makeMove(new Move(currentRow, currentCol, 7, 5), new Scanner(System.in), getColor());
-	        	if (!copy.isCheck(getColor(), copy)) {
-	        		legalMoves.add(new Move(currentRow, currentCol, 7, 6));
-	        	}
-	        }
-
-	        Piece rookLong = square[7][0].getPiece();
-	        if (rookLong instanceof Rook && !rookLong.hasMoved() && rookLong.getColor() == getColor() && square[7][3].getPiece() == null && square[7][2].getPiece() == null && square[7][1].getPiece() == null) {
-	        	Board copy = board.copyBoard();
-	        	copy.makeMove(new Move(currentRow, currentCol, 7, 3), new Scanner(System.in), getColor());
-	        	if (!copy.isCheck(getColor(), copy)) {
-	        		legalMoves.add(new Move(currentRow, currentCol, 7, 2));
-	        	}
-	        }
-	    }
+        if (startRow == 0 && startCol == 4 && !hasMoved()) {
+            checkCastling(square, board, legalMoves, 0, 7, 0, 5, 0, 6);
+            checkCastling(square, board, legalMoves, 0, 0, 0, 3, 0, 2);
+        } else if (startRow == 7 && startCol == 4) {
+            checkCastling(square, board, legalMoves, 7, 7, 7, 5, 7, 6);
+            checkCastling(square, board, legalMoves, 7, 0, 7, 3, 7, 2);
+        }
 
 	    
 	    return legalMoves;
@@ -80,4 +47,28 @@ public class King extends Piece {
 	public char getSymbol() {
 		return 'K';
 	}
+	
+	private void checkCastling(Square[][] squares, Board board, List<Move> legalMoves, int rookRow, int rookCol, int moveRow, int moveCol, int endRow, int endCol) {
+	    Piece rook = squares[rookRow][rookCol].getPiece();
+	    boolean isShortCastling = endCol > moveCol;
+
+	    if (rook instanceof Rook && !rook.hasMoved() && rook.getColor() == getColor() && squares[moveRow][moveCol].getPiece() == null) {
+	        int startCol = isShortCastling ? moveCol + 1 : moveCol - 1;
+	        int maxCol = isShortCastling ? endCol - 1 : endCol + 1;
+
+	        for (int col = startCol; col <= maxCol; col++) {
+	            if (squares[moveRow][col].getPiece() != null) {
+	                return;
+	            }
+	        }
+
+	        Board copy = board.copyBoard();
+	        copy.makeMove(new Move(getRow(), getColumn(), moveRow, moveCol), new Scanner(System.in), getColor());
+
+	        if (!copy.isCheck(getColor(), copy)) {
+	            legalMoves.add(new Move(getRow(), getColumn(), endRow, endCol));
+	        }
+	    }
+	}
+
 }

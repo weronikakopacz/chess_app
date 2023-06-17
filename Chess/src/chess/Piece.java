@@ -46,6 +46,14 @@ public abstract class Piece implements Cloneable {
 
     public abstract char getSymbol();
     
+    public boolean isValidMove(Square[][] square, int endRow, int endCol) {
+        if (endRow >= 0 && endRow < 8 && endCol >= 0 && endCol < 8) {
+            Piece piece = square[endRow][endCol].getPiece();
+            return piece == null || piece.getColor() != getColor();
+        }
+        return false;
+    }
+    
     @Override
     public Piece clone() {
         try {
