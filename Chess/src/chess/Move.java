@@ -43,7 +43,11 @@ public class Move implements Cloneable {
 
     @Override
     public String toString() {
-        return startRow + "-" + startCol + " to " + endRow + "-" + endCol;
+        char startColChar = (char) (startCol + 'a');
+        char endColChar = (char) (endCol + 'a');
+        int startRowNum = startRow + 1;
+        int endRowNum = endRow + 1;
+        return String.format("%c%d-%c%d", startColChar, startRowNum, endColChar, endRowNum);
     }
     
     @Override
