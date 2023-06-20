@@ -82,79 +82,52 @@ public class Board {
     }
     
     public void makeMove(Move move, Scanner scanner, Color currentPlayer) {
-        int fromRow = move.getStartRow();
-        int fromCol = move.getStartCol();
-        int toRow = move.getEndRow();
-        int toCol = move.getEndCol();
+        int startRow = move.getStartRow();
+        int startCol = move.getStartCol();
+        int endRow = move.getEndRow();
+        int endCol = move.getEndCol();
 
-        Square fromSquare = squares[fromRow][fromCol];
-        Square toSquare = squares[toRow][toCol];
+        Square startSquare = squares[startRow][startCol];
+        Square endSquare = squares[endRow][endCol];
 
-        Piece piece = fromSquare.getPiece();
+        Piece piece = startSquare.getPiece();
         piece.setMoved(true);
 
-        if (piece instanceof Pawn && fromCol != toCol && toSquare.getPiece() == null) {
-            int capturedCol = toCol;
-            int capturedRow = fromRow;
+        if (piece instanceof Pawn && startCol != endCol && endSquare.getPiece() == null) {
+            int capturedCol = endCol;
+            int capturedRow = startRow;
             squares[capturedRow][capturedCol].setPiece(null);
-        } else if (piece instanceof King && Math.abs(toCol - fromCol) == 2 && !isCheck(currentPlayer, this)) {
+        } else if (piece instanceof King && Math.abs(endCol - startCol) == 2 && !isCheck(currentPlayer, this)) {
             int rookFromCol, rookToCol;
-            if (toCol > fromCol) {
+            if (endCol > startCol) {
                 rookFromCol = 7;
-                rookToCol = toCol - 1;
+                rookToCol = endCol - 1;
             } else {
                 rookFromCol = 0;
-                rookToCol = toCol + 1;
+                rookToCol = endCol + 1;
             }
-            Square rookFromSquare = squares[fromRow][rookFromCol];
-            Square rookToSquare = squares[fromRow][rookToCol];
+            Square rookFromSquare = squares[startRow][rookFromCol];
+            Square rookToSquare = squares[startRow][rookToCol];
             Piece rook = rookFromSquare.getPiece();
             rook.setMoved(true);
             rookToSquare.setPiece(rook);
             rookFromSquare.setPiece(null);
-            rook.setRow(toRow);
+            rook.setRow(endRow);
             rook.setColumn(rookToCol);
         }
 
-        toSquare.setPiece(piece);
-        fromSquare.setPiece(null);
+        endSquare.setPiece(piece);
+        startSquare.setPiece(null);
 
-        piece.setRow(toRow);
-        piece.setColumn(toCol);
+        piece.setRow(endRow);
+        piece.setColumn(endCol);
 
-        if (piece instanceof Pawn && (toRow == 0 || toRow == 7)) {
-            Piece promotedPiece = choosePromotedPiece(scanner, toRow, toCol, currentPlayer);
-            toSquare.setPiece(promotedPiece);
+        if (piece instanceof Pawn && (endRow == 0 || endRow == 7)) {
+        	Piece promotedPiece = new Queen(currentPlayer, endRow, endCol);
+            endSquare.setPiece(promotedPiece);
         }
         
         lastMove = move;
-    }
-    
-    private Piece choosePromotedPiece(Scanner scanner, int row, int column, Color currentPlayer) {
-        System.out.println("Pawn promotion! Choose a piece to promote to: ");
-        System.out.println("1. Queen");
-        System.out.println("2. Rook");
-        System.out.println("3. Bishop");
-        System.out.println("4. Knight");
-
-        String choice;
-        do {
-            System.out.print("Enter your choice (1-4): ");
-            choice = scanner.nextLine();
-        } while (Integer.parseInt(choice) < 1 || Integer.parseInt(choice) > 4);
-
-        switch (choice) {
-            case "1":
-                return new Queen(currentPlayer, row, column);
-            case "2":
-                return new Rook(currentPlayer, row, column);
-            case "3":
-                return new Bishop(currentPlayer, row, column);
-            case "4":
-                return new Knight(currentPlayer, row, column);
-            default:
-                return null;
-        }
     }
 
 	public Move getLastMove() {

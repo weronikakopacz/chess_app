@@ -35,7 +35,7 @@ public class Game {
                     System.out.print("Enter your move (e.g., e2-e4): ");
                     String moveString = scanner.nextLine();
 
-                    if (shouldBotMove(moveString)) {
+                    if (currentPlayer == Color.WHITE && vsBot && moveString.isEmpty() && !botMoved) {
                         botColor = currentPlayer;
                         System.out.println("Bot's turn.");
                         Move randomMove = getRandomMove(board.legalMoves(currentPlayer));
@@ -94,10 +94,6 @@ public class Game {
         int toCol = toSquare.charAt(0) - 'a';
         int toRow = toSquare.charAt(1) - '1';
         return new Move(fromRow, fromCol, toRow, toCol);
-    }
-
-    private boolean shouldBotMove(String moveString) {
-        return currentPlayer == Color.WHITE && vsBot && moveString.isEmpty() && !botMoved;
     }
 
     private Move getRandomMove(List<Move> moves) {
