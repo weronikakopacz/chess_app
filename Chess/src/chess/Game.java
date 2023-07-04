@@ -19,7 +19,7 @@ public class Game {
         botMoved = false;
     }
 
-    public void play() {
+    private void play() {
         try (Scanner scanner = new Scanner(System.in)) {
             while (true) {
                 System.out.println(board.getSquareArray());

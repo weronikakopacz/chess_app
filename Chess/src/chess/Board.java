@@ -171,7 +171,7 @@ public class Board {
         return possibleMoves.isEmpty();
     }
  
-    public List<Move> collectAllPossibleMoves(Color playerColor, Board board) {
+    private List<Move> collectAllPossibleMoves(Color playerColor, Board board) {
         List<Move> possibleMoves = new ArrayList<>();
 
         for (int row = 0; row < 8; row++) {

@@ -1,4 +1,5 @@
 package chess;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Piece implements Cloneable {
@@ -14,11 +15,11 @@ public abstract class Piece implements Cloneable {
         moved = false;
     }
 
-    public int getRow() {
+    protected int getRow() {
         return row;
     }
 
-    public int getColumn() {
+    protected int getColumn() {
         return column;
     }
     
@@ -34,7 +35,7 @@ public abstract class Piece implements Cloneable {
         return color;
     }
 
-    public boolean hasMoved() {
+    protected boolean hasMoved() {
         return moved;
     }
 
@@ -42,16 +43,45 @@ public abstract class Piece implements Cloneable {
         this.moved = moved;
     }
 
-    public abstract List<Move> getPieceMoves(Square[][] square, Board board);
+    protected abstract List<Move> getPieceMoves(Square[][] square, Board board);
 
-    public abstract char getSymbol();
+    protected abstract char getSymbol();
     
-    public boolean isValidMove(Square[][] square, int endRow, int endCol) {
+    protected boolean isValidMove(Square[][] square, int endRow, int endCol) {
         if (endRow >= 0 && endRow < 8 && endCol >= 0 && endCol < 8) {
             Piece piece = square[endRow][endCol].getPiece();
             return piece == null || piece.getColor() != getColor();
         }
         return false;
+    }
+    
+    protected List<Move> HorizontalOrVerticalMoves(int[][] directions, Square[][] square) {
+    	List<Move> legalMoves = new ArrayList<>();
+
+	    int startRow = getRow();
+	    int startCol = getColumn();
+
+	    for (int[] direction : directions) {
+	        int dRow = direction[0];
+	        int dCol = direction[1];
+
+	        int endRow = startRow + dRow;
+	        int endCol = startCol + dCol;
+
+	        while (isValidMove(square, endRow, endCol)) {
+	            legalMoves.add(new Move(startRow, startCol, endRow, endCol));
+	            
+	            Piece piece = square[endRow][endCol].getPiece();
+	            if (piece != null) {
+	                break;
+	            }
+	            
+	            endRow += dRow;
+	            endCol += dCol;
+	        }
+	    }
+
+	    return legalMoves;
     }
     
     @Override
